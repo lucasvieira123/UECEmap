@@ -3,6 +3,7 @@ package com.example.lucas.uecemap;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -48,13 +49,23 @@ public class MapsActivity extends FragmentActivity {
                     .getMap();
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
-                setUpMap();
+                //setUpMap();
+                onMapReady(mMap);
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(-3.785914, -38.552517)));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
+                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             }
         }
     }
 
+
     public void onMapReady(GoogleMap map){
-        map.addMarker(new MarkerOptions().position(new LatLng(-3.785914,-38.552517)).title("UECE"));
+        MarkerOptions mark = new MarkerOptions().position(new LatLng(-3.785914,-38.552517)).title("UECE");
+        mark.snippet("Bem vindo à Universidade Estadual do Ceará");
+        map.addMarker(mark);
+        map.addMarker(new MarkerOptions().position(new LatLng(-3.7865545,-38.552551)).title("Macc"));
+        map.addMarker(new MarkerOptions().position(new LatLng(-3.7897417,-38.5531809)).title("Bloco P"));
+
 
     }
 
