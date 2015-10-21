@@ -1,9 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
-
+    signingConfigs {
+        config {
+        }
+    }
+    compileSdkVersion 'Google Inc.:Google APIs:23'
+    buildToolsVersion '23.0.1'
     defaultConfig {
         applicationId "com.example.lucas.uecemap"
         minSdkVersion 15

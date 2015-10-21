@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/UECEmap.iml" filepath="$PROJECT_DIR$/UECEmap.iml" />
+      <module fileurl="file://$PROJECT_DIR$/UeceMap.iml" filepath="$PROJECT_DIR$/UeceMap.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
