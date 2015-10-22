@@ -1,9 +1,13 @@
 package com.example.lucas.uecemap;
 
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -12,11 +16,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MapsActivity extends FragmentActivity {
 
-    private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private GoogleMap mMap;
+    private MyDatabaseHelper db = new MyDatabaseHelper(this);
+    private lugarDAO = LugarDAOSQLLite(db);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,12 +30,44 @@ public class MapsActivity extends FragmentActivity {
         Log.i("alert","BD criado");
         setUpMapIfNeeded();
         ///asdasd
+
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView)findViewById(R.id.searchView);
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+
+        handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent){
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            Log.i("Alert", "Query: " + query);
+            Lugar lugar = lugarDAO.fi(query);
+            if(lugar==null) mostrarToast("Busca não encontrada");
+            else mostrarToast("Achei: "+lugar.getNome()+" com descrição: "+lugar.getDescricao());
+
+
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         setUpMapIfNeeded();
+    }
+
+    public void mostrarToast(String mensagem){
+        Toast toast = Toast.makeText(this,mensagem, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     /**
@@ -78,7 +115,7 @@ public class MapsActivity extends FragmentActivity {
 
 
     private void setUpMap() {
-        DatabaseHelper db = new DatabaseHelper(this);
+
         preencherBD(db);
         ArrayList<Lugar> lugarList = db.obterTodosOsLugares();
         for(int i=0;i<lugarList.size();i++){
@@ -91,7 +128,7 @@ public class MapsActivity extends FragmentActivity {
 
     }
 
-    private void preencherBD(DatabaseHelper db){
+    private void preencherBD(MyDatabaseHelper db){
         db.addLugar(new Lugar("UECE","Bem-vindo à UECE",-3.785914, -38.552517));
         db.addLugar(new Lugar("Reitoria","Reitoria da UECE",-3.785882, -38.552594));
         db.addLugar(new Lugar("MACC/MPCOMP", "Prédio de pesquisa e mestrado em computação",-3.787052, -38.552691));

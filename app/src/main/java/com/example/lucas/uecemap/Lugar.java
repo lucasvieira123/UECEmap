@@ -6,6 +6,8 @@ import android.provider.ContactsContract;
  * Created by stack on 20/10/15.
  */
 public class Lugar {
+
+    private String id;
     private String nome;
     private String descricao;
     private double latitude;
