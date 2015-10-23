@@ -13,15 +13,18 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MapsActivity extends FragmentActivity {
 
     private GoogleMap mMap;
     private MyDatabaseHelper db = new MyDatabaseHelper(this);
-    private lugarDAO = LugarDAOSQLLite(db);
+    private LugarDAOSQLLite lugarDAO = new LugarDAOSQLLite(db);
+    private ArrayList<Marker> listMarker = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +54,14 @@ public class MapsActivity extends FragmentActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             Log.i("Alert", "Query: " + query);
-            Lugar lugar = lugarDAO.fi(query);
-            if(lugar==null) mostrarToast("Busca não encontrada");
-            else mostrarToast("Achei: "+lugar.getNome()+" com descrição: "+lugar.getDescricao());
+            List<Lugar> lugarList = lugarDAO.findByNomeOrDescricao(query);
+            if(lugarList.size()==0) mostrarToast("Busca não encontrada");
+            else{
+                for(int i=0;i<lugarList.size();i++){
+                    listMarker.get(lugarList.get(i).getId() - 1).setAlpha((float)0.5);
+                }
+
+            }
 
 
         }
@@ -117,22 +125,24 @@ public class MapsActivity extends FragmentActivity {
     private void setUpMap() {
 
         preencherBD(db);
-        ArrayList<Lugar> lugarList = db.obterTodosOsLugares();
+        ArrayList<Lugar> lugarList = lugarDAO.obterTodosOsLugares();
         for(int i=0;i<lugarList.size();i++){
             MarkerOptions mark = new MarkerOptions();
-            mark.position(new LatLng(lugarList.get(i).getLatitude(),lugarList.get(i).getLongitude()));
+            mark.position(new LatLng(lugarList.get(i).getLatitude(), lugarList.get(i).getLongitude()));
             mark.title(lugarList.get(i).getNome());
             mark.snippet(lugarList.get(i).getDescricao());
-            mMap.addMarker(mark);
+            Marker m = mMap.addMarker(mark);
+            m.setAlpha((float)0.5);
+            listMarker.add(m);
         }
 
     }
 
     private void preencherBD(MyDatabaseHelper db){
-        db.addLugar(new Lugar("UECE","Bem-vindo à UECE",-3.785914, -38.552517));
-        db.addLugar(new Lugar("Reitoria","Reitoria da UECE",-3.785882, -38.552594));
-        db.addLugar(new Lugar("MACC/MPCOMP", "Prédio de pesquisa e mestrado em computação",-3.787052, -38.552691));
-        db.addLugar(new Lugar("Bloco P","Bloco da Computação/Matemática/Psicologia",-3.789726, -38.553227));
-        db.addLugar(new Lugar("R.U.","Restaurante Universitário",-3.790486, -38.553262));
+        lugarDAO.addLugar(new Lugar("UECE", "Bem-vindo à UECE", -3.785914, -38.552517));
+        lugarDAO.addLugar(new Lugar("Reitoria", "Reitoria da UECE", -3.785882, -38.552594));
+        lugarDAO.addLugar(new Lugar("MACC/MPCOMP", "Prédio de pesquisa e mestrado em computação", -3.787052, -38.552691));
+        lugarDAO.addLugar(new Lugar("Bloco P", "Bloco da Computação/Matemática/Psicologia", -3.789726, -38.553227));
+        lugarDAO.addLugar(new Lugar("R.U.", "Restaurante Universitário", -3.790486, -38.553262));
     }
 }

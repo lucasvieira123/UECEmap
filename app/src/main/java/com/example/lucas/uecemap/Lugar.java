@@ -7,7 +7,7 @@ import android.provider.ContactsContract;
  */
 public class Lugar {
 
-    private String id;
+    private int id;
     private String nome;
     private String descricao;
     private double latitude;
@@ -57,5 +57,13 @@ public class Lugar {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public void setId(int id){
+        this.id = id;
+    }
+
+    public int getId(){
+        return id;
     }
 }
