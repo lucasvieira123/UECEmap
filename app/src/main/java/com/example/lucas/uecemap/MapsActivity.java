@@ -24,8 +24,7 @@ public class MapsActivity extends FragmentActivity {
     private GoogleMap mMap;
     private MyDatabaseHelper db = new MyDatabaseHelper(this);
     private LugarDAOSQLLite lugarDAO = new LugarDAOSQLLite(db);
-    private ArrayList<Marker> listMarker = new ArrayList<>();
-    private ArrayList<Integer> ids = new ArrayList<>();
+    private ArrayList<Marker> listMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,27 +47,22 @@ public class MapsActivity extends FragmentActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        for(int i=0;i<ids.size();i++)
-            listMarker.get(ids.get(i)).setVisible(false);
+        Log.i("alert","chegou aqui");
+        if(listMarker!=null){
+            for (Marker marker: listMarker)
+                marker.remove();
+        }
         handleIntent(intent);
+
     }
 
     private void handleIntent(Intent intent){
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            Log.i("Alert", "Query: " + query);
             List<Lugar> lugarList = lugarDAO.findByNome(query);
-            Log.i("alert","Tamanho arrayList: "+lugarList.size());
-            Log.i("alert",lugarList.get(0).getNome());
-            Log.i("alert",lugarList.get(1).getNome());
-            Log.i("alert",lugarList.get(2).getNome());
             if(lugarList.size()==0) mostrarToast("Busca não encontrada");
             else{
-                for(int i=0;i<lugarList.size();i++){
-
-                    listMarker.get(lugarList.get(i).getId()).setVisible(true);
-                    ids.add(lugarList.get(i).getId());
-                }
+                adicionarMarcadores(lugarList);
 
 
             }
@@ -112,8 +106,9 @@ public class MapsActivity extends FragmentActivity {
                     .getMap();
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
-                setUpMap();
+                //setUpMap();
                 //onMapReady(mMap);
+                mMap.setMyLocationEnabled(true);
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(-3.785914, -38.552517)));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
                 mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -121,7 +116,7 @@ public class MapsActivity extends FragmentActivity {
         }
     }
 
-    //SearchView search = (SearchView)findViewById(R.id.searchView);
+
 
 
     /**
@@ -132,10 +127,25 @@ public class MapsActivity extends FragmentActivity {
      */
 
 
+    private void adicionarMarcadores(List<Lugar> listLugar){
+        listMarker = new ArrayList<>();
+        for(Lugar l: listLugar){
+            MarkerOptions mark;
+            mark = new MarkerOptions();
+            mark.position(new LatLng(l.getLatitude(), l.getLongitude()));
+            mark.title(l.getNome());
+            mark.snippet(l.getDescricao() + "\nContato: " + l.getContato());
+            listMarker.add(mMap.addMarker(mark));
+        }
+
+
+
+    }
+
 
     private void setUpMap() {
 
-        preencherBD(db);
+        //preencherBD(db);
         ArrayList<Lugar> lugarList = lugarDAO.obterTodosOsLugares();
         for(int i=0;i<lugarList.size();i++){
             MarkerOptions mark = new MarkerOptions();

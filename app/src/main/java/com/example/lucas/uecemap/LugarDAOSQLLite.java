@@ -50,12 +50,15 @@ public class LugarDAOSQLLite {
 
     private void converterCursorParaObjetos(Cursor cursor, List<Lugar> aux) {
         Lugar lugar = null;
-        cursor.moveToFirst();
-        while (cursor.moveToNext()) {
-            lugar = new Lugar(cursor.getString(1),cursor.getString(4), Double.parseDouble(cursor.getString(2)),Double.parseDouble(cursor.getString(3)), Integer.parseInt(cursor.getString(5)));
-            aux.add(lugar);
-        }
-        Log.i("alert","tamanho da aux2: "+aux.size());
+        Log.i("alert","tamanho da aux2:"+aux.size());
+       if(cursor.moveToFirst()){
+          do {
+               lugar = new Lugar(cursor.getString(1),cursor.getString(4), Double.parseDouble(cursor.getString(2)),Double.parseDouble(cursor.getString(3)), Integer.parseInt(cursor.getString(5)));
+               aux.add(lugar);
+           } while (cursor.moveToNext());
+       }
+
+        Log.i("alert","tamanho da aux3: "+aux.size());
     }
 
     public List<Lugar> findByDescricao(String descricao) {
@@ -94,7 +97,7 @@ public class LugarDAOSQLLite {
         return lugarList;
     }
 
-    public void addLugar (Lugar lugar){
+    public void addLugar(Lugar lugar) {
         SQLiteDatabase db = mSQLLiteDatabase.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
