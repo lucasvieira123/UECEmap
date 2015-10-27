@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import static com.example.lucas.uecemap.LugarORM.*;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class LugarDAOSQLLite {
 
     private List<Lugar> findByColumn(String column, String value) {
         SQLiteDatabase db = mSQLLiteDatabase.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TAB_NOME + " WHERE " + column + " like concat('%', ?, '%')", new String[] {value});
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TAB_NOME + " WHERE " + column + " like '%'||?||'%'", new String[] {value});
         List<Lugar> aux = new ArrayList<>();
         try {
             converterCursorParaObjetos(cursor, aux);
@@ -49,7 +50,7 @@ public class LugarDAOSQLLite {
     private void converterCursorParaObjetos(Cursor cursor, List<Lugar> aux) {
         Lugar lugar = null;
         while (cursor.moveToNext()) {
-            lugar = new Lugar(cursor.getString(0),cursor.getString(3),Double.parseDouble(cursor.getString(1)),Double.parseDouble(cursor.getString(2)));
+            lugar = new Lugar(cursor.getString(1),cursor.getString(4), Double.parseDouble(cursor.getString(2)),Double.parseDouble(cursor.getString(3)), Long.parseLong(cursor.getString(5)));
             aux.add(lugar);
         }
     }
@@ -79,10 +80,12 @@ public class LugarDAOSQLLite {
         if(cursor.moveToFirst()){
             do{
                 Lugar lugar = new Lugar();
-                lugar.setNome(cursor.getString(0));
-                lugar.setLatitude(Double.parseDouble(cursor.getString(1)));
-                lugar.setLongitude(Double.parseDouble(cursor.getString(2)));
-                lugar.setDescricao(cursor.getString(3));
+                lugar.setNome(cursor.getString(1));
+                lugar.setLatitude(Double.parseDouble(cursor.getString(2)));
+                lugar.setLongitude(Double.parseDouble(cursor.getString(3)));
+                lugar.setDescricao(cursor.getString(4));
+                Log.i("alert","Valor contato: "+cursor.getString(5));
+                lugar.setContato(Long.parseLong(cursor.getString(5)));
                 lugarList.add(lugar);
             }while(cursor.moveToNext());
         }
@@ -97,6 +100,7 @@ public class LugarDAOSQLLite {
         cv.put(COL_LAT,lugar.getLatitude());
         cv.put(COL_LONG,lugar.getLongitude());
         cv.put(COL_DESC,lugar.getDescricao());
+        cv.put(COL_CONT,lugar.getContato());
 
         db.insert(TAB_NOME, null, cv);
         db.close();

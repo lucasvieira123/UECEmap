@@ -2,23 +2,27 @@ package com.example.lucas.uecemap;
 
 import android.provider.ContactsContract;
 
+import java.io.Serializable;
+
 /**
  * Created by stack on 20/10/15.
  */
-public class Lugar {
+public class Lugar implements Serializable {
 
     private int id;
     private String nome;
     private String descricao;
     private double latitude;
     private double longitude;
+    private long contato;
 
 
-    public Lugar(String nome, String descricao, double latitude, double longitude){
+    public Lugar(String nome, String descricao, double latitude, double longitude, long contato){
         this.nome = nome;
         this.descricao = descricao;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.contato = contato;
     }
 
     public Lugar(){
@@ -65,5 +69,13 @@ public class Lugar {
 
     public int getId(){
         return id;
+    }
+
+    public long getContato() {
+        return contato;
+    }
+
+    public void setContato(long contato) {
+        this.contato = contato;
     }
 }
