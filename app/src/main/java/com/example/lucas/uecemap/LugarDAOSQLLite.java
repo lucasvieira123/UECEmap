@@ -35,6 +35,7 @@ public class LugarDAOSQLLite {
         SQLiteDatabase db = mSQLLiteDatabase.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TAB_NOME + " WHERE " + column + " like '%'||?||'%'", new String[] {value});
         List<Lugar> aux = new ArrayList<>();
+        Log.i("alert","tamanho da aux1: "+aux.size());
         try {
             converterCursorParaObjetos(cursor, aux);
         } finally {
@@ -49,10 +50,12 @@ public class LugarDAOSQLLite {
 
     private void converterCursorParaObjetos(Cursor cursor, List<Lugar> aux) {
         Lugar lugar = null;
+        cursor.moveToFirst();
         while (cursor.moveToNext()) {
-            lugar = new Lugar(cursor.getString(1),cursor.getString(4), Double.parseDouble(cursor.getString(2)),Double.parseDouble(cursor.getString(3)), Long.parseLong(cursor.getString(5)));
+            lugar = new Lugar(cursor.getString(1),cursor.getString(4), Double.parseDouble(cursor.getString(2)),Double.parseDouble(cursor.getString(3)), Integer.parseInt(cursor.getString(5)));
             aux.add(lugar);
         }
+        Log.i("alert","tamanho da aux2: "+aux.size());
     }
 
     public List<Lugar> findByDescricao(String descricao) {
@@ -84,8 +87,7 @@ public class LugarDAOSQLLite {
                 lugar.setLatitude(Double.parseDouble(cursor.getString(2)));
                 lugar.setLongitude(Double.parseDouble(cursor.getString(3)));
                 lugar.setDescricao(cursor.getString(4));
-                Log.i("alert","Valor contato: "+cursor.getString(5));
-                lugar.setContato(Long.parseLong(cursor.getString(5)));
+                lugar.setContato(Integer.parseInt(cursor.getString(5)));
                 lugarList.add(lugar);
             }while(cursor.moveToNext());
         }
@@ -100,9 +102,13 @@ public class LugarDAOSQLLite {
         cv.put(COL_LAT,lugar.getLatitude());
         cv.put(COL_LONG,lugar.getLongitude());
         cv.put(COL_DESC,lugar.getDescricao());
-        cv.put(COL_CONT,lugar.getContato());
+        cv.put(COL_CONT, lugar.getContato());
+
+
 
         db.insert(TAB_NOME, null, cv);
+
+
         db.close();
     }
 

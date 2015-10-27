@@ -14,10 +14,10 @@ public class Lugar implements Serializable {
     private String descricao;
     private double latitude;
     private double longitude;
-    private long contato;
+    private int contato;
 
 
-    public Lugar(String nome, String descricao, double latitude, double longitude, long contato){
+    public Lugar(String nome, String descricao, double latitude, double longitude, int contato){
         this.nome = nome;
         this.descricao = descricao;
         this.latitude = latitude;
@@ -71,11 +71,11 @@ public class Lugar implements Serializable {
         return id;
     }
 
-    public long getContato() {
+    public int getContato() {
         return contato;
     }
 
-    public void setContato(long contato) {
+    public void setContato(int contato) {
         this.contato = contato;
     }
 }

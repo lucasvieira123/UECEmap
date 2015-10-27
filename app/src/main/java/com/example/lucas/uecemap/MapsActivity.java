@@ -25,6 +25,7 @@ public class MapsActivity extends FragmentActivity {
     private MyDatabaseHelper db = new MyDatabaseHelper(this);
     private LugarDAOSQLLite lugarDAO = new LugarDAOSQLLite(db);
     private ArrayList<Marker> listMarker = new ArrayList<>();
+    private ArrayList<Integer> ids = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,8 @@ public class MapsActivity extends FragmentActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
+        for(int i=0;i<ids.size();i++)
+            listMarker.get(ids.get(i)).setVisible(false);
         handleIntent(intent);
     }
 
@@ -54,11 +57,19 @@ public class MapsActivity extends FragmentActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             Log.i("Alert", "Query: " + query);
-            List<Lugar> lugarList = lugarDAO.findByNomeOrDescricao(query);
+            List<Lugar> lugarList = lugarDAO.findByNome(query);
+            Log.i("alert","Tamanho arrayList: "+lugarList.size());
+            Log.i("alert",lugarList.get(0).getNome());
+            Log.i("alert",lugarList.get(1).getNome());
+            Log.i("alert",lugarList.get(2).getNome());
             if(lugarList.size()==0) mostrarToast("Busca não encontrada");
             else{
-                for(int i=0;i<lugarList.size();i++)
-                    listMarker.get(lugarList.get(i).getId() - 1).setVisible(true);
+                for(int i=0;i<lugarList.size();i++){
+
+                    listMarker.get(lugarList.get(i).getId()).setVisible(true);
+                    ids.add(lugarList.get(i).getId());
+                }
+
 
             }
 
