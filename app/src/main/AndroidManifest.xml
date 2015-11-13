@@ -35,6 +35,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
+
+        </activity>
+        <activity
+            android:name=".TelaInfo"
+            android:label="@string/title_activity_tela_info"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity android:name=".PesquisaActivity" >
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/search" />
@@ -42,11 +50,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".TelaInfo"
-            android:label="@string/title_activity_tela_info"
-            android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>
 

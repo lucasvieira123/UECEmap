@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -36,39 +37,13 @@ public class MapsActivity extends FragmentActivity {
 
 
         // Associate searchable configuration with the SearchView
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView)findViewById(R.id.searchView);
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
-
-        handleIntent(getIntent());
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        Log.i("alert","chegou aqui");
-        if(listMarker!=null){
-            for (Marker marker: listMarker)
-                marker.remove();
-        }
-        handleIntent(intent);
 
     }
 
-    private void handleIntent(Intent intent){
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            List<Lugar> lugarList = lugarDAO.findByNome(query);
-            if(lugarList.size()==0) mostrarToast("Busca não encontrada");
-            else{
-                adicionarMarcadores(lugarList);
 
-
-            }
-
-
-        }
+    public void searchClick(){
+        Intent i = new Intent(this,PesquisaActivity.class);
+        startActivity(i);
     }
 
 
@@ -158,7 +133,7 @@ public class MapsActivity extends FragmentActivity {
         }
 
     }
-
+    //função a ser chamada somente uma vez a cada versao do BDhit
     private void preencherBD(MyDatabaseHelper db){
         lugarDAO.addLugar(new Lugar("UECE", "Bem-vindo à UECE", -3.785914, -38.552517,12345678));
         lugarDAO.addLugar(new Lugar("Reitoria", "Reitoria da UECE", -3.785882, -38.552594,12345678));
