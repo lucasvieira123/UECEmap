@@ -13,12 +13,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageButton"
-        android:alpha="0.3"
+        android:alpha="0.45"
         android:src="@mipmap/ic_search_black_24dp"
+        android:onClick="searchClick"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:onClick="searchClick" />
+        android:layout_marginTop="60dp" />
 
 
 </RelativeLayout>

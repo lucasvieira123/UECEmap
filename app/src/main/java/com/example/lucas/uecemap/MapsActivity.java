@@ -41,7 +41,7 @@ public class MapsActivity extends FragmentActivity {
     }
 
 
-    public void searchClick(){
+    public void searchClick(View v){
         Intent i = new Intent(this,PesquisaActivity.class);
         startActivity(i);
     }
@@ -53,10 +53,7 @@ public class MapsActivity extends FragmentActivity {
         setUpMapIfNeeded();
     }
 
-    public void mostrarToast(String mensagem){
-        Toast toast = Toast.makeText(this,mensagem, Toast.LENGTH_SHORT);
-        toast.show();
-    }
+
 
     /**
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly

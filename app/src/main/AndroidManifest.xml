@@ -42,7 +42,7 @@
             android:label="@string/title_activity_tela_info"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
-        <activity android:name=".PesquisaActivity" >
+        <activity android:name=".PesquisaActivity" android:launchMode="singleTop" >
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/search" />
