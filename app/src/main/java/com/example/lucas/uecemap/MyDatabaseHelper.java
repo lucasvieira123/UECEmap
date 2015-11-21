@@ -40,6 +40,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper{
         onCreate(db);
     }
 
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
 }

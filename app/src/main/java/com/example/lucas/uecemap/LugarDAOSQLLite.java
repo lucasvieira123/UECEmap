@@ -2,6 +2,7 @@ package com.example.lucas.uecemap;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -32,10 +33,11 @@ public class LugarDAOSQLLite {
     }
 
     private List<Lugar> findByColumn(String column, String value) {
+        Log.d("alert","pesquisa com: "+value);
         SQLiteDatabase db = mSQLLiteDatabase.getReadableDatabase();
+        Log.d("alert","chegou aqui1");
         Cursor cursor = db.rawQuery("SELECT * FROM " + TAB_NOME + " WHERE " + column + " like '%'||?||'%'", new String[] {value});
         List<Lugar> aux = new ArrayList<>();
-        Log.i("alert","tamanho da aux1: "+aux.size());
         try {
             converterCursorParaObjetos(cursor, aux);
         } finally {
@@ -50,16 +52,18 @@ public class LugarDAOSQLLite {
 
     private void converterCursorParaObjetos(Cursor cursor, List<Lugar> aux) {
         Lugar lugar = null;
-        Log.i("alert","tamanho da aux2:"+aux.size());
        if(cursor.moveToFirst()){
           do {
-               lugar = new Lugar(cursor.getString(1),cursor.getString(4), Double.parseDouble(cursor.getString(2)),Double.parseDouble(cursor.getString(3)), Integer.parseInt(cursor.getString(5)));
+              Log.d("alert","chegou aqui2");
+               lugar = new Lugar(Integer.parseInt(cursor.getString(0)),cursor.getString(1),cursor.getString(4), Double.parseDouble(cursor.getString(2)),Double.parseDouble(cursor.getString(3)), Integer.parseInt(cursor.getString(5)));
                aux.add(lugar);
            } while (cursor.moveToNext());
        }
-
-        Log.i("alert","tamanho da aux3: "+aux.size());
+        else
+            Log.d("alert","chegou aqui3");
     }
+
+
 
     public List<Lugar> findByDescricao(String descricao) {
         return findByColumn(COL_DESC,descricao);
@@ -86,6 +90,7 @@ public class LugarDAOSQLLite {
         if(cursor.moveToFirst()){
             do{
                 Lugar lugar = new Lugar();
+                lugar.setId(Integer.parseInt(cursor.getString(0)));
                 lugar.setNome(cursor.getString(1));
                 lugar.setLatitude(Double.parseDouble(cursor.getString(2)));
                 lugar.setLongitude(Double.parseDouble(cursor.getString(3)));
@@ -113,6 +118,18 @@ public class LugarDAOSQLLite {
 
 
         db.close();
+    }
+
+    public boolean contemRegistro(){
+        SQLiteDatabase db = mSQLLiteDatabase.getReadableDatabase();
+        long numOfEntries = DatabaseUtils.queryNumEntries(db, LugarORM.TAB_NOME);
+
+        if(numOfEntries == 0l) {
+            // Tabela vazia, preencha com seus dados iniciais
+            return false;
+        } else {
+            return true;
+        }
     }
 
 

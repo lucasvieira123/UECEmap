@@ -17,6 +17,17 @@ public class Lugar implements Serializable {
     private int contato;
 
 
+
+
+    public Lugar(int id,String nome, String descricao, double latitude, double longitude, int contato){
+        this.nome = nome;
+        this.id = id;
+        this.descricao = descricao;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.contato = contato;
+    }
+
     public Lugar(String nome, String descricao, double latitude, double longitude, int contato){
         this.nome = nome;
         this.descricao = descricao;

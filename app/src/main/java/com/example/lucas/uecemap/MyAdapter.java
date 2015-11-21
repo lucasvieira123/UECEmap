@@ -1,6 +1,7 @@
 package com.example.lucas.uecemap;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 import android.content.Context;
@@ -11,44 +12,31 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
 
-public class MyAdapter extends ArrayAdapter<ModeloTelaInfo> {
 
-    private final Context context;
-    private final ArrayList<ModeloTelaInfo> modelsArrayList;
+public class MyAdapter extends ArrayAdapter<Lugar> {
 
-    public MyAdapter(Context context, ArrayList<ModeloTelaInfo> modelsArrayList) {
+    public MyAdapter(Context context, List<Lugar> lugarList) {
 
-        super(context, R.layout.item, modelsArrayList);
-
-        this.context = context;
-        this.modelsArrayList = modelsArrayList;
+        super(context, R.layout.item, lugarList);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
+        Lugar lugar = getItem(position);
 
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if(convertView == null)
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item, parent, false);
 
+        TextView tvNome = (TextView) convertView.findViewById(R.id.item_title);
+        TextView tvDescricao = (TextView) convertView.findViewById(R.id.item_content);
 
-            View rowView = null;
-            rowView = inflater.inflate(R.layout.item, parent, false);
-
-
-            ImageView imgView = (ImageView) rowView.findViewById(R.id.item_icon);
-            TextView titleView = (TextView) rowView.findViewById(R.id.item_title);
-            TextView contentView = (TextView) rowView.findViewById(R.id.item_content);
+        tvNome.setText(lugar.getNome());
+        tvDescricao.setText(lugar.getDescricao());
 
 
-            imgView.setImageResource(modelsArrayList.get(position).getIcon());
-            titleView.setText(modelsArrayList.get(position).getTitle());
-            contentView.setText(modelsArrayList.get(position).getContent());
-
-
-
-
-        return rowView;
+        return convertView;
     }
 }

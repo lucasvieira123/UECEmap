@@ -31,7 +31,7 @@ public class MapsActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        Log.i("alert","BD criado");
+        Log.i("alert", "BD criado");
         setUpMapIfNeeded();
         ///asdasd
 
@@ -39,6 +39,9 @@ public class MapsActivity extends FragmentActivity {
         // Associate searchable configuration with the SearchView
 
     }
+
+
+
 
 
     public void searchClick(View v){
@@ -51,6 +54,16 @@ public class MapsActivity extends FragmentActivity {
     protected void onResume() {
         super.onResume();
         setUpMapIfNeeded();
+        Intent i = getIntent();
+        Bundle b = i.getExtras();
+        if(b!=null){
+            Lugar lugar = new Lugar();
+            lugar.setLongitude(b.getDouble("long"));
+            lugar.setLatitude(b.getDouble("lat"));
+            List<Lugar> list = new ArrayList<>();
+            list.add(lugar);
+            adicionarMarcadores(list);
+        }
     }
 
 
@@ -80,6 +93,7 @@ public class MapsActivity extends FragmentActivity {
             if (mMap != null) {
                 //setUpMap();
                 //onMapReady(mMap);
+                //preencherBD();
                 mMap.setMyLocationEnabled(true);
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(-3.785914, -38.552517)));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
@@ -99,6 +113,7 @@ public class MapsActivity extends FragmentActivity {
      */
 
 
+
     private void adicionarMarcadores(List<Lugar> listLugar){
         listMarker = new ArrayList<>();
         for(Lugar l: listLugar){
@@ -116,7 +131,7 @@ public class MapsActivity extends FragmentActivity {
 
 
     private void setUpMap() {
-
+        testarBD();
         //preencherBD(db);
         ArrayList<Lugar> lugarList = lugarDAO.obterTodosOsLugares();
         for(int i=0;i<lugarList.size();i++){
@@ -131,11 +146,18 @@ public class MapsActivity extends FragmentActivity {
 
     }
     //função a ser chamada somente uma vez a cada versao do BDhit
-    private void preencherBD(MyDatabaseHelper db){
+    private void preencherBD(){
         lugarDAO.addLugar(new Lugar("UECE", "Bem-vindo à UECE", -3.785914, -38.552517,12345678));
         lugarDAO.addLugar(new Lugar("Reitoria", "Reitoria da UECE", -3.785882, -38.552594,12345678));
         lugarDAO.addLugar(new Lugar("MACC/MPCOMP", "Prédio de pesquisa e mestrado em computação", -3.787052, -38.552691,12345678));
         lugarDAO.addLugar(new Lugar("Bloco P", "Bloco da Computação/Matemática/Psicologia", -3.789726, -38.553227,12345678));
         lugarDAO.addLugar(new Lugar("R.U.", "Restaurante Universitário", -3.790486, -38.553262,12345678));
+    }
+
+    private void testarBD(){
+        if(lugarDAO.contemRegistro())
+            Log.d("alert","contem registro");
+        else
+            Log.d("alert","tabela vazia");
     }
 }
