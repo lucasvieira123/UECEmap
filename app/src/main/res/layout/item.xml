@@ -2,17 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="90dp"
-    android:background="#CCCC00">
+    >
 
     <!-- icon -->
     <ImageView
         android:id="@+id/item_icon"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:src="@mipmap/ic_help_black_24dp"
-        android:layout_centerVertical="true"
+        android:layout_width="43dp"
+        android:layout_height="40dp"
+        android:src="@mipmap/ic_place_black_36dp"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
 
     <!-- title -->
     <TextView
@@ -20,24 +20,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/item_icon"
-        android:layout_above="@+id/item_counter"
-        android:textSize="30sp"
-        android:text="Título da Informação"/>
+        android:textSize="20sp"
+        android:text="Título da Informação"
+        android:textStyle="bold"
+        android:textColor="#0a0e0f"/>
 
-    <!-- counter -->
     <TextView
         android:id="@+id/item_content"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:gravity="center"
-        android:textColor="#336600"
-        android:textSize="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:text="Conteúdo"
         android:textStyle="bold"
-        android:text="Conteúdo da informação"
-        android:layout_alignBottom="@+id/item_icon"
-        android:layout_alignRight="@+id/item_title"
-        android:layout_alignEnd="@+id/item_title"
+        android:textColor="#757b7d"
+        android:layout_below="@+id/item_title"
         android:layout_toRightOf="@+id/item_icon"
         android:layout_toEndOf="@+id/item_icon" />
+
+    <!-- counter -->
 
 </RelativeLayout>
