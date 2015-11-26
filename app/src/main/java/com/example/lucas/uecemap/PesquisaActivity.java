@@ -1,32 +1,25 @@
 package com.example.lucas.uecemap;
 
-import android.app.LoaderManager;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.SimpleAdapter;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.Marker;
-
-import java.util.ArrayList;
 import java.util.List;
 
-public class PesquisaActivity extends AppCompatActivity {
+public class
+        PesquisaActivity extends AppCompatActivity {
     private static final int URL_LOADER = 0;
     private MyDatabaseHelper db = new MyDatabaseHelper(this);
     private LugarDAOSQLLite lugarDAO = new LugarDAOSQLLite(db);
@@ -34,31 +27,51 @@ public class PesquisaActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        setTheme(R.style.CustomTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pesquisa);
-        SearchManager searchManager =
+
+
+        handleIntent(getIntent());
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.my_menu, menu);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setIcon(R.mipmap.ic_launcher);
+        actionBar.setTitle(R.string.title);
+       SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView)findViewById(R.id.searchView);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView)MenuItemCompat.getActionView(menu.findItem(R.id.search));
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+
+        searchView.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                //fazerPesquisa(query);
-
+                fazerPesquisa(query, "Busca não encontrou nenhum resultado");
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                fazerPesquisa(newText);
+                fazerPesquisa(newText, null);
                 return false;
             }
         });
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
 
-        handleIntent(getIntent());
+
+        return true;
+
     }
+
+
+
+
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -70,30 +83,24 @@ public class PesquisaActivity extends AppCompatActivity {
     private void handleIntent(Intent intent){
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            fazerPesquisa(query);
+            fazerPesquisa(query,null);
 
 
         }
     }
 
-    private void fazerPesquisa(String query){
+    private void fazerPesquisa(String query, String resposta){
         final List<Lugar> lugarList = lugarDAO.findByNome(query);
         ListView lv = (ListView) findViewById(R.id.listPesq);
-        Log.d("alert","Query: "+query);
-        if(lugarList.size() == 0)
-            mostrarToast("Busca não encontrou nenhum resultado.");
-        else{
-            Log.d("alert","primeiro resultado: "+lugarList.get(0).getNome());
-            adapter = new MyAdapter(this,lugarList);
-            if(adapter == null)
-                Log.d("alert","adapter nulo");
-            else if(lv == null)
-                Log.d("alert","lv nulo");
+        if(lugarList.size() == 0 && resposta!=null)
+            mostrarToast(resposta);
+        else {
+            adapter = new MyAdapter(this, lugarList);
             lv.setAdapter(adapter);
             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        marcarMapa(lugarList.get(position).getLongitude(),lugarList.get(position).getLatitude());
+                    marcarMapa(lugarList.get(position).getLongitude(), lugarList.get(position).getLatitude());
                 }
             });
         }

@@ -3,6 +3,7 @@
     <string name="title_activity_maps">Mapa da UECE</string>
     <string name="hint">Digite o local desejado...</string>
     <string name="title_activity_tela_info">TelaInfo</string>
+    <string name="title">Pesquisa de Lugares</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

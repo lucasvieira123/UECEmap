@@ -33,9 +33,9 @@ public class LugarDAOSQLLite {
     }
 
     private List<Lugar> findByColumn(String column, String value) {
-        Log.d("alert","pesquisa com: "+value);
+
         SQLiteDatabase db = mSQLLiteDatabase.getReadableDatabase();
-        Log.d("alert","chegou aqui1");
+
         Cursor cursor = db.rawQuery("SELECT * FROM " + TAB_NOME + " WHERE " + column + " like '%'||?||'%'", new String[] {value});
         List<Lugar> aux = new ArrayList<>();
         try {
@@ -54,13 +54,12 @@ public class LugarDAOSQLLite {
         Lugar lugar = null;
        if(cursor.moveToFirst()){
           do {
-              Log.d("alert","chegou aqui2");
+
                lugar = new Lugar(Integer.parseInt(cursor.getString(0)),cursor.getString(1),cursor.getString(4), Double.parseDouble(cursor.getString(2)),Double.parseDouble(cursor.getString(3)), Integer.parseInt(cursor.getString(5)));
                aux.add(lugar);
            } while (cursor.moveToNext());
        }
-        else
-            Log.d("alert","chegou aqui3");
+
     }
 
 

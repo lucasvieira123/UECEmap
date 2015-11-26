@@ -3,6 +3,7 @@ package com.example.lucas.uecemap;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,9 +32,7 @@ public class MapsActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        Log.i("alert", "BD criado");
         setUpMapIfNeeded();
-        ///asdasd
 
 
         // Associate searchable configuration with the SearchView
@@ -93,7 +92,7 @@ public class MapsActivity extends FragmentActivity {
             if (mMap != null) {
                 //setUpMap();
                 //onMapReady(mMap);
-                //preencherBD();
+
                 mMap.setMyLocationEnabled(true);
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(-3.785914, -38.552517)));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
@@ -131,7 +130,6 @@ public class MapsActivity extends FragmentActivity {
 
 
     private void setUpMap() {
-        testarBD();
         //preencherBD(db);
         ArrayList<Lugar> lugarList = lugarDAO.obterTodosOsLugares();
         for(int i=0;i<lugarList.size();i++){
@@ -154,10 +152,5 @@ public class MapsActivity extends FragmentActivity {
         lugarDAO.addLugar(new Lugar("R.U.", "Restaurante Universitário", -3.790486, -38.553262,12345678));
     }
 
-    private void testarBD(){
-        if(lugarDAO.contemRegistro())
-            Log.d("alert","contem registro");
-        else
-            Log.d("alert","tabela vazia");
-    }
+
 }
