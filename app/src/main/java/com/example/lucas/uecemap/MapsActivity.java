@@ -37,11 +37,7 @@ public class MapsActivity extends FragmentActivity {
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                Intent i = new Intent(this,LugarInfo.class);
-                Bundle b = new Bundle();
-                b.putString("nome",lugarList.get(0).getNome());
-                i.putExtras(b);
-                startActivity(i);
+                mostrarInfo(lugarList.get(0).getNome());
                 return false;
             }
         });
@@ -51,7 +47,13 @@ public class MapsActivity extends FragmentActivity {
     }
 
 
-
+    public void mostrarInfo (String nome){
+        Intent i = new Intent(this,LugarInfo.class);
+        Bundle b = new Bundle();
+        b.putString("nome",nome);
+        i.putExtras(b);
+        startActivity(i);
+    }
 
 
     public void searchClick(View v){
