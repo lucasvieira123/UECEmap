@@ -21,7 +21,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper{
     private static final String COL_DESC = "descricao";
     private static final String COL_ID = "id";
     private static final String COL_CONT = "contato";
-    private static final String CRIAR_TABELA = "CREATE TABLE IF NOT EXISTS lugares (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT NOT NULL, latitude FLOAT NOT NULL, longitude FLOAT NOT NULL, descricao TEXT, contato INTEGER NOT NULL);";
+    private static final String COL_FOTO = "foto";
+    private static final String CRIAR_TABELA = "CREATE TABLE IF NOT EXISTS lugares (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT NOT NULL, latitude FLOAT NOT NULL, longitude FLOAT NOT NULL, descricao TEXT, contato INTEGER NOT NULL, foto BLOB);";
 
     MyDatabaseHelper(Context context) {
         super(context, "ueceMap", null, DATABASE_VERSION);
@@ -40,6 +41,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper{
         onCreate(db);
     }
 
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
 
 }

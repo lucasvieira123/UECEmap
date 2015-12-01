@@ -15,17 +15,28 @@ public class Lugar implements Serializable {
     private double latitude;
     private double longitude;
     private int contato;
+    private byte[] foto;
 
 
 
 
-    public Lugar(int id,String nome, String descricao, double latitude, double longitude, int contato){
+    public Lugar(int id,String nome, String descricao, double latitude, double longitude, int contato, byte[] foto){
         this.nome = nome;
         this.id = id;
         this.descricao = descricao;
         this.latitude = latitude;
         this.longitude = longitude;
         this.contato = contato;
+        this.foto = foto;
+    }
+
+    public Lugar(String nome, String descricao, double latitude, double longitude, int contato, byte[] foto){
+        this.nome = nome;
+        this.descricao = descricao;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.contato = contato;
+        this.foto = foto;
     }
 
     public Lugar(String nome, String descricao, double latitude, double longitude, int contato){
@@ -35,6 +46,7 @@ public class Lugar implements Serializable {
         this.longitude = longitude;
         this.contato = contato;
     }
+
 
     public Lugar(){
 
@@ -88,5 +100,13 @@ public class Lugar implements Serializable {
 
     public void setContato(int contato) {
         this.contato = contato;
+    }
+
+    public byte[] getFoto() {
+        return foto;
+    }
+
+    public void setFoto(byte[] foto) {
+        this.foto = foto;
     }
 }

@@ -55,7 +55,7 @@ public class LugarDAOSQLLite {
        if(cursor.moveToFirst()){
           do {
 
-               lugar = new Lugar(Integer.parseInt(cursor.getString(0)),cursor.getString(1),cursor.getString(4), Double.parseDouble(cursor.getString(2)),Double.parseDouble(cursor.getString(3)), Integer.parseInt(cursor.getString(5)));
+               lugar = new Lugar(Integer.parseInt(cursor.getString(0)),cursor.getString(1),cursor.getString(4), Double.parseDouble(cursor.getString(2)),Double.parseDouble(cursor.getString(3)), Integer.parseInt(cursor.getString(5)), cursor.getString(6).getBytes());
                aux.add(lugar);
            } while (cursor.moveToNext());
        }
@@ -95,7 +95,9 @@ public class LugarDAOSQLLite {
                 lugar.setLongitude(Double.parseDouble(cursor.getString(3)));
                 lugar.setDescricao(cursor.getString(4));
                 lugar.setContato(Integer.parseInt(cursor.getString(5)));
+                lugar.setFoto(cursor.getString(6).getBytes());
                 lugarList.add(lugar);
+
             }while(cursor.moveToNext());
         }
         return lugarList;
@@ -110,6 +112,7 @@ public class LugarDAOSQLLite {
         cv.put(COL_LONG,lugar.getLongitude());
         cv.put(COL_DESC,lugar.getDescricao());
         cv.put(COL_CONT, lugar.getContato());
+        cv.put(COL_FOTO,lugar.getFoto());
 
 
 

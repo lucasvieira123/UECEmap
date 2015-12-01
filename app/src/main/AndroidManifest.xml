@@ -34,10 +34,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-
         </activity>
-        <activity android:name=".PesquisaActivity" android:launchMode="singleTop" >
+        <activity
+            android:name=".PesquisaActivity"
+            android:launchMode="singleTop" >
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/search" />
@@ -45,6 +45,11 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".LugarInfo"
+            android:label="@string/title_activity_lugar_info"
+            android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>
 

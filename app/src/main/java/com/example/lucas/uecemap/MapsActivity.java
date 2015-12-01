@@ -27,13 +27,24 @@ public class MapsActivity extends FragmentActivity {
     private MyDatabaseHelper db = new MyDatabaseHelper(this);
     private LugarDAOSQLLite lugarDAO = new LugarDAOSQLLite(db);
     private ArrayList<Marker> listMarker;
+    private List<Lugar> lugarList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
-
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Intent i = new Intent(this,LugarInfo.class);
+                Bundle b = new Bundle();
+                b.putString("nome",lugarList.get(0).getNome());
+                i.putExtras(b);
+                startActivity(i);
+                return false;
+            }
+        });
 
         // Associate searchable configuration with the SearchView
 
@@ -56,14 +67,11 @@ public class MapsActivity extends FragmentActivity {
         Intent i = getIntent();
         Bundle b = i.getExtras();
         if(b!=null){
-            Lugar lugar = new Lugar();
-            lugar.setLongitude(b.getDouble("long"));
-            lugar.setLatitude(b.getDouble("lat"));
-            List<Lugar> list = new ArrayList<>();
-            list.add(lugar);
-            adicionarMarcadores(list);
+            lugarList = lugarDAO.findByNome(b.getString("nome"));
+            adicionarMarcadores(lugarList);
         }
     }
+
 
 
 
@@ -145,6 +153,8 @@ public class MapsActivity extends FragmentActivity {
     }
     //função a ser chamada somente uma vez a cada versao do BDhit
     private void preencherBD(){
+
+
         lugarDAO.addLugar(new Lugar("UECE", "Bem-vindo à UECE", -3.785914, -38.552517,12345678));
         lugarDAO.addLugar(new Lugar("Reitoria", "Reitoria da UECE", -3.785882, -38.552594,12345678));
         lugarDAO.addLugar(new Lugar("MACC/MPCOMP", "Prédio de pesquisa e mestrado em computação", -3.787052, -38.552691,12345678));

@@ -100,7 +100,7 @@ public class
             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    marcarMapa(lugarList.get(position).getLongitude(), lugarList.get(position).getLatitude());
+                    marcarMapa(lugarList.get(position).getLongitude(), lugarList.get(position).getLatitude(),lugarList.get(position).getNome());
                 }
             });
         }
@@ -111,10 +111,11 @@ public class
         toast.show();
     }
 
-    public void marcarMapa(Double longi, Double lat){
+    public void marcarMapa(Double longi, Double lat, String nome){
         Bundle b = new Bundle();
         b.putDouble("long",longi);
         b.putDouble("lat", lat);
+        b.putString("nome",nome);
         Intent i = new Intent(this,MapsActivity.class);
         i.putExtras(b);
         startActivity(i);
