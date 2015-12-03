@@ -36,11 +36,11 @@ public class MyDatabaseHelper extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Deleta BD
-        db.execSQL("DROP TABLE IF EXISTS"+TAB_NOME);
+        db.execSQL("DROP TABLE IF EXISTS "+TAB_NOME);
         // Cria tabela novamente
         onCreate(db);
     }
 
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 12;
 
 }

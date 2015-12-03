@@ -17,7 +17,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:src="@drawable/powered_by_google_light" />
+        android:src="@mipmap/ic_insert_photo_black_36dp" />
 
     <ImageView
         android:id="@+id/item_icon"

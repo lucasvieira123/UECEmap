@@ -6,7 +6,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -21,23 +26,25 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity {
+public class MapsActivity extends AppCompatActivity {
 
     private GoogleMap mMap;
     private MyDatabaseHelper db = new MyDatabaseHelper(this);
     private LugarDAOSQLLite lugarDAO = new LugarDAOSQLLite(db);
     private ArrayList<Marker> listMarker;
     private List<Lugar> lugarList;
+    private boolean flag=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
+        //preencherBD();
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                mostrarInfo(lugarList.get(0).getNome());
+                mostrarInfo(lugarList.get(0).getId());
                 return false;
             }
         });
@@ -46,15 +53,29 @@ public class MapsActivity extends FragmentActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.my_menu, menu);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(R.string.title_activity_maps);
 
-    public void mostrarInfo (String nome){
+        return false;
+    }
+
+
+
+    public void mostrarInfo (int id){
         Intent i = new Intent(this,LugarInfo.class);
         Bundle b = new Bundle();
-        b.putString("nome",nome);
+        b.putInt("id", id);
         i.putExtras(b);
         startActivity(i);
     }
-
+    public void pesquisa(){
+        Intent i = new Intent(this,PesquisaActivity.class);
+        startActivity(i);
+    }
 
     public void searchClick(View v){
         Intent i = new Intent(this,PesquisaActivity.class);
@@ -65,14 +86,32 @@ public class MapsActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setUpMapIfNeeded();
-        Intent i = getIntent();
-        Bundle b = i.getExtras();
-        if(b!=null){
-            lugarList = lugarDAO.findByNome(b.getString("nome"));
-            adicionarMarcadores(lugarList);
+        Log.d("alert","flag: "+flag);
+        if(flag) {
+            Log.d("alert", "entrou no onResume");
+            setUpMapIfNeeded();
+            Intent i = getIntent();
+            Bundle b = i.getExtras();
+            if (b != null) {
+                lugarList = new ArrayList<>();
+                Log.d("alert", "id: " + b.getInt("id"));
+                lugarList.add(lugarDAO.getById(Integer.toString(b.getInt("id"))));
+                adicionarMarcadores(lugarList);
+            }
         }
     }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        flag = true;
+    }
+
+  @Override
+  public void onDestroy(){
+      super.onDestroy();
+      flag = false;
+  }
 
 
 

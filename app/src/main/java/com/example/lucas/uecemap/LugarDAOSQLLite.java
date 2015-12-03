@@ -22,8 +22,17 @@ public class LugarDAOSQLLite {
         this.mSQLLiteDatabase = sqlLiteDatabase;
     }
 
-    public Lugar getById(String id) {
-        return null;
+    public Lugar getById(String id){
+        SQLiteDatabase db = mSQLLiteDatabase.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM "+TAB_NOME + " WHERE "+ COL_ID + "= ?",new String[]{id});
+        List<Lugar> aux = new ArrayList<>();
+        try{
+            converterCursorParaObjetos(cursor, aux);
+        } finally{
+            cursor.close();
+        }
+        return aux.get(0);
+
     }
 
     public List<Lugar> findByNomeOrDescricao(String busca) {
@@ -55,7 +64,7 @@ public class LugarDAOSQLLite {
        if(cursor.moveToFirst()){
           do {
 
-               lugar = new Lugar(Integer.parseInt(cursor.getString(0)),cursor.getString(1),cursor.getString(4), Double.parseDouble(cursor.getString(2)),Double.parseDouble(cursor.getString(3)), Integer.parseInt(cursor.getString(5)), cursor.getString(6).getBytes());
+               lugar = new Lugar(Integer.parseInt(cursor.getString(0)),cursor.getString(1),cursor.getString(4), Double.parseDouble(cursor.getString(2)),Double.parseDouble(cursor.getString(3)), Integer.parseInt(cursor.getString(5)));
                aux.add(lugar);
            } while (cursor.moveToNext());
        }
