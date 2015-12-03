@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="schemas.android.com/tools"
+    tools:context="com.example.sample.YourActivity"
+    xmlns:yourapp="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/buttonSearch"
+        android:title="@string/title"
+        yourapp:showAsAction="always"
+        android:icon="@mipmap/ic_search_white_36dp"
+        yourapp:actionViewClass="android.support.v7.widget.AppCompatButton"
+        />
+</menu>

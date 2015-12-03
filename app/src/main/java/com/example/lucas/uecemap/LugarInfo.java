@@ -33,7 +33,6 @@ public class LugarInfo extends AppCompatActivity {
         text = (TextView) findViewById(R.id.textDesc);
         text.setText(lugarList.get(0).getDescricao());
         text = (TextView) findViewById(R.id.textCont);
-        Log.d("alert", "contato " + lugarList.get(0).getContato() + " nome " + lugarList.get(0).getNome());
         text.setText(Integer.toString(lugarList.get(0).getContato()));
         text.setOnTouchListener(new View.OnTouchListener() {
             @Override

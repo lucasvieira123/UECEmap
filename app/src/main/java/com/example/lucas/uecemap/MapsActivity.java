@@ -1,20 +1,14 @@
 package com.example.lucas.uecemap;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,7 +27,6 @@ public class MapsActivity extends AppCompatActivity {
     private LugarDAOSQLLite lugarDAO = new LugarDAOSQLLite(db);
     private ArrayList<Marker> listMarker;
     private List<Lugar> lugarList;
-    private boolean flag=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +41,8 @@ public class MapsActivity extends AppCompatActivity {
                 return false;
             }
         });
-
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(R.string.title_activity_maps);
         // Associate searchable configuration with the SearchView
 
     }
@@ -56,11 +50,23 @@ public class MapsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.my_menu, menu);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(R.string.title_activity_maps);
-
+        inflater.inflate(R.menu.menu_map, menu);
+        android.support.v7.widget.AppCompatButton button = (android.support.v7.widget.AppCompatButton) MenuItemCompat.getActionView(menu.findItem(R.id.buttonSearch));
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchClick(v);
+            }
+        });
         return false;
+    }
+
+
+
+    @Override
+    public void onNewIntent(Intent intent){
+        super.onNewIntent(intent);
+        marcarLugar(intent);
     }
 
 
@@ -80,38 +86,20 @@ public class MapsActivity extends AppCompatActivity {
     public void searchClick(View v){
         Intent i = new Intent(this,PesquisaActivity.class);
         startActivity(i);
+        //finish();
+    }
+
+    public void marcarLugar(Intent i){
+        Bundle b = i.getExtras();
+        if (b != null) {
+            lugarList = new ArrayList<>();
+            lugarList.add(lugarDAO.getById(Integer.toString(b.getInt("id"))));
+            adicionarMarcadores(lugarList);
+        }else Log.d("alert","b é null");
     }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d("alert","flag: "+flag);
-        if(flag) {
-            Log.d("alert", "entrou no onResume");
-            setUpMapIfNeeded();
-            Intent i = getIntent();
-            Bundle b = i.getExtras();
-            if (b != null) {
-                lugarList = new ArrayList<>();
-                Log.d("alert", "id: " + b.getInt("id"));
-                lugarList.add(lugarDAO.getById(Integer.toString(b.getInt("id"))));
-                adicionarMarcadores(lugarList);
-            }
-        }
-    }
 
-    @Override
-    public void onPause(){
-        super.onPause();
-        flag = true;
-    }
-
-  @Override
-  public void onDestroy(){
-      super.onDestroy();
-      flag = false;
-  }
 
 
 
@@ -143,8 +131,8 @@ public class MapsActivity extends AppCompatActivity {
                 //onMapReady(mMap);
 
                 mMap.setMyLocationEnabled(true);
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(-3.785914, -38.552517)));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(-3.788221, -38.552883)));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo((float)16.4));
                 mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             }
         }
@@ -163,13 +151,13 @@ public class MapsActivity extends AppCompatActivity {
 
 
     private void adicionarMarcadores(List<Lugar> listLugar){
+        mMap.clear();
         listMarker = new ArrayList<>();
         for(Lugar l: listLugar){
             MarkerOptions mark;
             mark = new MarkerOptions();
             mark.position(new LatLng(l.getLatitude(), l.getLongitude()));
             mark.title(l.getNome());
-            mark.snippet(l.getDescricao() + "\nContato: " + l.getContato());
             listMarker.add(mMap.addMarker(mark));
         }
 

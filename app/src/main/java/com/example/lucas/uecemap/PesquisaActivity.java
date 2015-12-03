@@ -113,13 +113,14 @@ public class
 
     public void marcarMapa(Double longi, Double lat, int id){
         Bundle b = new Bundle();
-        b.putDouble("long",longi);
+        b.putDouble("long", longi);
         b.putDouble("lat", lat);
-        b.putInt("id",id);
+        b.putInt("id", id);
         Intent i = new Intent(this,MapsActivity.class);
         i.putExtras(b);
+        i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(i);
-
+        finish();
     }
 
 }
