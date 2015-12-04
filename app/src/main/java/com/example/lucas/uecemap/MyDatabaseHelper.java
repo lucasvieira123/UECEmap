@@ -9,9 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by stack on 20/10/15.
- */
 public class MyDatabaseHelper extends SQLiteOpenHelper{
 
     private static final String TAB_NOME = "lugares";
@@ -40,7 +37,5 @@ public class MyDatabaseHelper extends SQLiteOpenHelper{
         // Cria tabela novamente
         onCreate(db);
     }
-
     private static final int DATABASE_VERSION = 12;
-
 }

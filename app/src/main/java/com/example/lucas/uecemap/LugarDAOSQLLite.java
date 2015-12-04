@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import static com.example.lucas.uecemap.LugarORM.*;
 import java.util.ArrayList;
@@ -32,15 +31,12 @@ public class LugarDAOSQLLite {
             cursor.close();
         }
         return aux.get(0);
-
     }
-
     public List<Lugar> findByNomeOrDescricao(String busca) {
         List<Lugar> aux = findByNome(busca);
         aux.addAll(findByDescricao(busca));
         return aux;
     }
-
     private List<Lugar> findByColumn(String column, String value) {
 
         SQLiteDatabase db = mSQLLiteDatabase.getReadableDatabase();
@@ -54,7 +50,6 @@ public class LugarDAOSQLLite {
         }
         return aux;
     }
-
     public List<Lugar> findByNome(String nome) {
         return findByColumn(COL_NOME, nome);
     }
@@ -70,48 +65,9 @@ public class LugarDAOSQLLite {
        }
 
     }
-
-
-
     public List<Lugar> findByDescricao(String descricao) {
         return findByColumn(COL_DESC,descricao);
     }
-
-   /* public Lugar obterLugar(String nome) {
-        SQLiteDatabase db = mSQLLiteDatabase.getReadableDatabase();
-        Cursor cursor = db.query(TAB_NOME,new String[]{COL_NOME,COL_LAT,COL_LONG,COL_DESC},COL_NOME+"=?",new String[]{nome.toUpperCase()},null,null,null,null);
-        Lugar lugar = null;
-        if(cursor!=null && cursor.moveToFirst()){
-            lugar = new Lugar(cursor.getString(0),cursor.getString(3),Double.parseDouble(cursor.getString(1)),Double.parseDouble(cursor.getString(2)));
-            cursor.close();
-        }
-
-        return lugar;
-    }*/
-
-    public ArrayList<Lugar> obterTodosOsLugares(){
-        ArrayList<Lugar> lugarList = new ArrayList<Lugar>();
-
-        SQLiteDatabase db = mSQLLiteDatabase.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM "+TAB_NOME,null);
-
-        if(cursor.moveToFirst()){
-            do{
-                Lugar lugar = new Lugar();
-                lugar.setId(Integer.parseInt(cursor.getString(0)));
-                lugar.setNome(cursor.getString(1));
-                lugar.setLatitude(Double.parseDouble(cursor.getString(2)));
-                lugar.setLongitude(Double.parseDouble(cursor.getString(3)));
-                lugar.setDescricao(cursor.getString(4));
-                lugar.setContato(Integer.parseInt(cursor.getString(5)));
-                lugar.setFoto(cursor.getString(6).getBytes());
-                lugarList.add(lugar);
-
-            }while(cursor.moveToNext());
-        }
-        return lugarList;
-    }
-
     public void addLugar(Lugar lugar) {
         SQLiteDatabase db = mSQLLiteDatabase.getWritableDatabase();
 
@@ -122,26 +78,20 @@ public class LugarDAOSQLLite {
         cv.put(COL_DESC,lugar.getDescricao());
         cv.put(COL_CONT, lugar.getContato());
         cv.put(COL_FOTO,lugar.getFoto());
-
-
-
         db.insert(TAB_NOME, null, cv);
-
-
         db.close();
     }
 
-    public boolean contemRegistro(){
+    public void fillEmptyDB(){
         SQLiteDatabase db = mSQLLiteDatabase.getReadableDatabase();
         long numOfEntries = DatabaseUtils.queryNumEntries(db, LugarORM.TAB_NOME);
-
         if(numOfEntries == 0l) {
-            // Tabela vazia, preencha com seus dados iniciais
-            return false;
-        } else {
-            return true;
+            addLugar(new Lugar("UECE", "Bem-vindo à UECE", -3.785914, -38.552517,12345678));
+            addLugar(new Lugar("Reitoria", "Reitoria da UECE", -3.785882, -38.552594,12345678));
+            addLugar(new Lugar("MACC/MPCOMP", "Prédio de pesquisa e mestrado em computação", -3.787052, -38.552691,12345678));
+            addLugar(new Lugar("Bloco P", "Bloco da Computação/Matemática/Psicologia", -3.789726, -38.553227,12345678));
+            addLugar(new Lugar("R.U.", "Restaurante Universitário", -3.790486, -38.553262,12345678));;
         }
     }
-
 
 }
