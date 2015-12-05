@@ -23,10 +23,10 @@ import java.util.List;
 public class MapsActivity extends AppCompatActivity {
 
     private GoogleMap mMap;
-    private MyDatabaseHelper db = new MyDatabaseHelper(this);
-    private LugarDAOSQLLite lugarDAO = new LugarDAOSQLLite(db);
+    //private MyDatabaseHelper db = new MyDatabaseHelper(this);
+    //private LugarDAOSQLLite lugarDAO = new LugarDAOSQLLite(db);
     private ArrayList<Marker> listMarker;
-    private List<Lugar> lugarList;
+    private Bundle b;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,17 +34,8 @@ public class MapsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
         //lugarDAO.fillEmptyDB();
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                showInfo(lugarList.get(0).getId());
-                return false;
-            }
-        });
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(R.string.title_activity_maps);
-        // Associate searchable configuration with the SearchView
-
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -74,14 +65,11 @@ public class MapsActivity extends AppCompatActivity {
     public void searchClick(View v){
         Intent i = new Intent(this,PesquisaActivity.class);
         startActivity(i);
-        //finish();
     }
     public void setPlace(Intent i){
-        Bundle b = i.getExtras();
+        b = i.getExtras();
         if (b != null) {
-            lugarList = new ArrayList<>();
-            lugarList.add(lugarDAO.getById(Integer.toString(b.getInt("id"))));
-            addMark(lugarList);
+           addMark(b.getDouble("lat"),b.getDouble("long"));
         }else Log.d("alert","b é null");
     }
     private void setUpMapIfNeeded() {
@@ -91,12 +79,26 @@ public class MapsActivity extends AppCompatActivity {
             if (mMap != null) {
                 mMap.setMyLocationEnabled(true);
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(-3.788221, -38.552883)));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo((float)16.4));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo((float) 16.4));
                 mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        showInfo(b.getInt("id"));
+                        return false;
+                    }
+                });
             }
         }
     }
-    private void addMark(List<Lugar> listLugar){
+    private void addMark(double lat, double longi){
+        mMap.clear();
+        MarkerOptions mark;
+        mark = new MarkerOptions();
+        mark.position(new LatLng(lat, longi));
+        mMap.addMarker(mark);
+    }
+    private void addMarkers(List<Lugar> listLugar){
         mMap.clear();
         listMarker = new ArrayList<>();
         for(Lugar l: listLugar){

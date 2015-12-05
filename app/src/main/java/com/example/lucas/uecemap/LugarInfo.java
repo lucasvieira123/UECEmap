@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -38,5 +40,11 @@ public class LugarInfo extends AppCompatActivity {
                 return false;
             }
         });
+        ImageView img = (ImageView) findViewById(R.id.imageLugar);
+        if(lugarList.get(0).getNome().equals("BLOCO P")) img.setImageResource(R.mipmap.bloco_p);
+        else if(lugarList.get(0).getNome().equals("R.U.")) img.setImageResource(R.mipmap.ru);
+        else if(lugarList.get(0).getNome().equals("UECE")) img.setImageResource(R.mipmap.uece);
+        else if(lugarList.get(0).getNome().equals("REITORIA")) img.setImageResource(R.mipmap.reitoria);
+        else if(lugarList.get(0).getNome().equals("MACC/MPCOMP")) img.setImageResource(R.mipmap.macc);
     }
 }
