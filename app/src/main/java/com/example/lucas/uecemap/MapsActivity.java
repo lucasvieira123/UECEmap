@@ -23,8 +23,8 @@ import java.util.List;
 public class MapsActivity extends AppCompatActivity {
 
     private GoogleMap mMap;
-    //private MyDatabaseHelper db = new MyDatabaseHelper(this);
-    //private LugarDAOSQLLite lugarDAO = new LugarDAOSQLLite(db);
+    private MyDatabaseHelper db = new MyDatabaseHelper(this);
+    private LugarDAOSQLLite lugarDAO = new LugarDAOSQLLite(db);
     private ArrayList<Marker> listMarker;
     private Bundle b;
 
@@ -33,7 +33,7 @@ public class MapsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
-        //lugarDAO.fillEmptyDB();
+        lugarDAO.fillEmptyDB();
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(R.string.title_activity_maps);
     }
