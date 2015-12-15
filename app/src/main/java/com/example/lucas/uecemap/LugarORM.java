@@ -13,6 +13,6 @@ public class LugarORM {
     static final String COL_ID = "id";
     static final String COL_CONT = "contato";
     static final String COL_FOTO = "foto";
-    static final String CRIAR_TABELA = "CREATE TABLE IF NOT EXISTS lugares (id INTEGER PRIMARY KEY AUTOINCREMENT,nome TEXT NOT NULL, latitude FLOAT NOT NULL, longitude FLOAT NOT NULL, descricao TEXT, contato INTEGER NOT NULL, foto BLOB);";
+    static final String CRIAR_TABELA = "CREATE TABLE IF NOT EXISTS lugares (id INTEGER PRIMARY KEY AUTOINCREMENT,nome TEXT NOT NULL, latitude FLOAT NOT NULL, longitude FLOAT NOT NULL, descricao TEXT, contato INTEGER NOT NULL);";
 
 }
